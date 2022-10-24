@@ -239,10 +239,10 @@ class Option:
                         payoff_list[j] = (self.get_CRR_p(N)*payoff_list[j + 1] + (1 - self.get_CRR_p(N))*payoff_list[j])*self.get_CRR_df(N)
                     else:
                         if self.type == "C":
-                            payoff_list[j] = np.maximum((self.S*self.get_CRR_u(N)**j*self.get_CRR_d()**(i - j) - self.K),
+                            payoff_list[j] = np.maximum((self.S*self.get_CRR_u(N)**j*self.get_CRR_d(N)**(i - j) - self.K),
                                                  (self.get_crr_p(N)*payoff_list[j + 1] + (1 - self.get_CRR_p(N))*payoff_list[j])*self.get_CRR_df(N))
                         else:
-                            payoff_list[j] = np.maximum(-(self.S*self.get_CRR_u(N)**j*self.get_CRR_d()**(i - j) - self.K),
+                            payoff_list[j] = np.maximum(-(self.S*self.get_CRR_u(N)**j*self.get_CRR_d(N)**(i - j) - self.K),
                                                  (self.get_crr_p(N)*payoff_list[j + 1] + (1 - self.get_CRR_p(N))*payoff_list[j])*self.get_CRR_df(N))
                             
             return payoff_list[0]
