@@ -284,7 +284,15 @@ class Option:
 
     def get_gamma(self):
         """
-        Gets the gamma of the option. For more information, visit https://github.com/JulioManuelOsorio/derivatives-package"""
+        Gets the gamma of the option. For more information, visit https://github.com/JulioManuelOsorio/derivatives-package
+        
+        Parameters
+        ----------
+        
+        Returns
+        ----------
+        The gamma of the option
+        """
         if self.flag == "EUR":
            return norm.pdf(self.get_d1(), 0, 1)/(self.S*self.sigma*np.sqrt(self.get_tau()))
 
