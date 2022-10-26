@@ -274,7 +274,8 @@ class Option:
         
         Returns
         ----------
-        The delta of the option
+        float
+           The delta of the option
         """
         if self.flag == "EUR":
            if self.Type == "C":
@@ -291,13 +292,24 @@ class Option:
         
         Returns
         ----------
-        The gamma of the option
+        float
+           The gamma of the option
         """
         if self.flag == "EUR":
            return norm.pdf(self.get_d1(), 0, 1)/(self.S*self.sigma*np.sqrt(self.get_tau()))
 
     def get_theta(self):
-        """ """
+        """ 
+        Gets the theta of the option. For more information, visit https://github.com/JulioManuelOsorio/derivatives-package
+        
+        Parameters
+        ----------
+        
+        Returns
+        ----------
+        float
+           The theta of the option
+        """
         if self.flag == "EUR":
            if self.type == "C":
               return -self.S*norm.pdf(self.get_d1(), 0, 1)*self.sigma/(2*np.sqrt(self.get_tau())) - self.r*self.K*math.exp(-self.r*self.get_tau())*norm.cdf(self.get_d2(), 0, 1)
@@ -305,20 +317,37 @@ class Option:
               return self.K*math.exp(-self.r*self.get_tau())*norm.cdf(-self.get_d2(), 0, 1) - self.S*norm.cdf(-self.get_d1(), 0, 1)
 
     def get_vega(self):
-        """ """
+        """ 
+        Gets the vega of the option. For more information, visit https://github.com/JulioManuelOsorio/derivatives-package
+        
+        Parameters
+        ----------
+        
+        Returns
+        ----------
+        float
+           The vega of the option.
+        """
         if self.flag == "EUR":
            return self.S*norm.pdf(self.get_d1(), 0, 1)*np.sqrt(self.get_tau())
 
     def get_rho(self):
-        """ """
+        """ 
+        Gets the rho of the option. For more information, visit https://github.com/JulioManuelOsorio/derivatives-package
+        
+        Parameters
+        ----------
+        
+        Returns
+        ----------
+        float
+           The rho of the option.
+        """
         if self.flag == "EUR":
            if self.Type == "C":
               return self.K*self.get_tau()*math.exp(-self.r*self.get_tau())*norm.cdf(self.get_d2(), 0, 1)
            else:
               return -self.K*self.get_tau()*math.exp(-self.r*self.get_tau())*norm.cdf(-self.get_d2(), 0, 1)
         
-def comb(n,i):
-
-    return math.factorial(n)/(math.factorial(n - i)*math.factorial(i))
         
         
