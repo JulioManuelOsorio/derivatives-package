@@ -6,26 +6,95 @@ from scipy.optimize import brentq, fsolve
 
 
 def log_returns(price):
+    """ 
+    Gets the log returns series given a price time series
+        
+    Parameters
+    ----------
+    price : list or pandas.Series
+        The price time series
+    
+    Returns
+    ----------
+    pandas.Series
+        The log returns series
+    """
     if type(price) == list:
         return np.log(1 + pd.Series(price).pct_change())
     else:
         return np.log(1 + price.pct_change())
 
 def mean_log_returns(price):
+    """
+    Gets the mean of the log returns series of a given price time series
+    
+    Parameters
+    ----------
+    price : list or pandas.Series
+        The price time series
+    
+    Returns
+    ----------
+    float
+        The mean of the log returns series of the price time series
+    
+    """
     log_return = log_returns(price)
     return np.mean(log_return.dropna())
 
 def historical_vol(price):
+    """
+    Gets the historical volatility (std) of a given price time series
+    
+    Parameters
+    ----------
+    price : list or pandas.Series
+        The price time series
+    
+    Returns
+    ----------
+    float
+        The historical volatility of the price time series
+    
+    """
     log_return = log_returns(price).dropna()
     mean_log_return = mean_log_returns(price)
     return np.sqrt(sum([(r - mean_log_return)**2 for r in log_return])/(len(log_return) - 1))
 
 def skew(price):
+    """
+    Gets the skewness of a given price time series
+
+    Parameters
+    ----------
+    price : list or pandas.Series
+        The price time series
+
+    Returns
+    -------
+    float
+        The skewness of the price time series
+    
+    """
     log_return = log_returns(price).dropna()
     mean_log_return = mean_log_returns(price)
     return (sum([(r - mean_log_return)**3 for r in log_return])/(1/len(log_return)*(sum([(r - mean_log_return)**2 for r in log_return]))**3/2))
 
 def kurt(price):
+    """
+    Gets the kurtosis of a given price time series
+
+    Parameters
+    ----------
+    price : list or pandas.Series
+        The price time series
+
+    Returns
+    -------
+    float
+        The kurtosis of the price time series
+    
+    """
     log_return = log_returns(price).dropna()
     mean_log_return = mean_log_returns(price)
     return ((1/len(log_return))*sum([(r - mean_log_return)**4 for r in log_return]))/(((1/len(log_return))*sum([(r - mean_log_return)**2 for r in log_return**2]))) - 3

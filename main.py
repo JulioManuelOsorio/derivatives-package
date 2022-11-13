@@ -12,21 +12,21 @@ class Option:
     Attributes
     ----------
     r : float
-       The risk-free rate
+        The risk-free rate
     S : float
-       Price of the underlying asset
+        Price of the underlying asset
     K : float
-       Strike price of the option
+        Strike price of the option
     T : float
-       Time of option expiration, in years
+        Time of option expiration, in years
     sigma : float
-       Standard deviation of the asset's returns
+        Standard deviation of the asset's returns
     Type : str, default = "C"
-       Type of the option. "C" stands for call, "P" stands for put.
+        Type of the option. "C" stands for call, "P" stands for put.
     t : float, default = 0
-       Time of the beginning of the contract, in years
+        Time of the beginning of the contract, in years
     flag : str, default = "EUR"
-       Flag of the option. "AME" stands for american, "EUR" stands for european.
+        Flag of the option. "AME" stands for american, "EUR" stands for european.
        
      """
     def __init__(self, r, S, K, T, sigma, Type="C", t=0, flag = "EUR"):
@@ -64,7 +64,7 @@ class Option:
         Returns
         ----------
         float
-           Time maturity of the option
+            Time maturity of the option
         
         """
         return self.T - self.t
@@ -79,7 +79,7 @@ class Option:
         Returns
         ----------
         float
-           The d1 of the option
+            The d1 of the option
            
         """
         return (np.log(self.S/self.K) + (self.r + self.sigma**2/2)*self.get_tau())/(self.sigma*np.sqrt(self.get_tau()))
@@ -94,7 +94,7 @@ class Option:
         Returns
         ----------
         float
-           The d2 of the option
+            The d2 of the option
            
         """
         return self.get_d1() - self.sigma*np.sqrt(self.get_tau())
@@ -106,12 +106,12 @@ class Option:
         Parameters
         ----------
         S_t : float
-           The price of the underlying asset at time t
+            The price of the underlying asset at time t
            
         Returns
         ----------
         float
-           The payoff of the option at time t
+            The payoff of the option at time t
           
         """
         if self.Type == "C":
@@ -126,12 +126,13 @@ class Option:
         Parameters
         ----------
         N : int
-           Number of binomial time steps
+            Number of binomial time steps
         
         Returns
         ----------
         float
-           The dt of the option
+            The dt of the option
+        
         """
         return float(self.get_tau()/N)
     
@@ -143,12 +144,13 @@ class Option:
         Parameters
         ----------
         N : int
-           Number of binomial time steps
+            Number of binomial time steps
            
         Returns
         ----------
         float
-           The df of the option
+            The df of the option
+        
         """
         return math.exp(-self.r*self.get_CRR_dt(N))
     
@@ -160,12 +162,12 @@ class Option:
         Parameters
         ----------
         N : int
-           Number of binomial time steps
+            Number of binomial time steps
            
         Returns
         ----------
         float
-           The proportion u of the option
+            The proportion u of the option
 
         """
         return math.exp(self.sigma*math.sqrt(self.get_CRR_dt(N)))
@@ -177,12 +179,13 @@ class Option:
         Parameters
         ----------
         N : int
-           Number of binomial time steps
+            Number of binomial time steps
            
         Returns
         ----------
         float
-           The proportion d of the option
+            The proportion d of the option
+        
         """
         return 1/self.get_CRR_u(N)
     
@@ -193,12 +196,12 @@ class Option:
         Parameters
         ----------
         N  : int
-           Number of binomial time steps
+            Number of binomial time steps
            
         Returns
         ----------
         float
-           The p of the option
+            The p of the option
 
         """
         return (math.exp(self.r*self.get_CRR_dt(N) - self.get_CRR_d(N)))/(self.get_CRR_u(N) - self.get_CRR_d(N))
@@ -210,14 +213,15 @@ class Option:
         Parameters
         ----------
         solver : str
-           Method used to estimate the price of the option. "BSM" stands for Black-Scholes-Merton and "CRR" stands for Cox-Ross-Rubinstein
+            Method used to estimate the price of the option. "BSM" stands for Black-Scholes-Merton and "CRR" stands for Cox-Ross-Rubinstein
         N : int, default = None
-           Number of binomial time steps, used for binomial pricing models
+            Number of binomial time steps, used for binomial pricing models
            
         Returns 
         ----------
         float
-           The price of the option
+            The price of the option
+        
         """
         if solver == "BSM":
             if self.Type == "C":
@@ -275,7 +279,8 @@ class Option:
         Returns
         ----------
         float
-           The delta of the option
+            The delta of the option
+        
         """
         if self.flag == "EUR":
            if self.Type == "C":
@@ -293,7 +298,8 @@ class Option:
         Returns
         ----------
         float
-           The gamma of the option
+            The gamma of the option
+        
         """
         if self.flag == "EUR":
            return norm.pdf(self.get_d1(), 0, 1)/(self.S*self.sigma*np.sqrt(self.get_tau()))
@@ -308,7 +314,8 @@ class Option:
         Returns
         ----------
         float
-           The theta of the option
+            The theta of the option
+        
         """
         if self.flag == "EUR":
            if self.type == "C":
@@ -326,7 +333,8 @@ class Option:
         Returns
         ----------
         float
-           The vega of the option.
+            The vega of the option.
+        
         """
         if self.flag == "EUR":
            return self.S*norm.pdf(self.get_d1(), 0, 1)*np.sqrt(self.get_tau())
@@ -341,13 +349,12 @@ class Option:
         Returns
         ----------
         float
-           The rho of the option.
+            The rho of the option.
+        
         """
         if self.flag == "EUR":
            if self.Type == "C":
               return self.K*self.get_tau()*math.exp(-self.r*self.get_tau())*norm.cdf(self.get_d2(), 0, 1)
            else:
               return -self.K*self.get_tau()*math.exp(-self.r*self.get_tau())*norm.cdf(-self.get_d2(), 0, 1)
-        
-        
         
