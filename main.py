@@ -254,19 +254,18 @@ class Option:
                     
             
             
-   # def plot_convergence(step, max_time, min_time = 1, solver = "CRR"):
-    #    if solver == "CRR":
-    #        bsm_price = self.get_price(solver = "BSM")
-    #        times = range(min_time, max_time, step)
-    #        values = [self.get_price(solver, N) for N in times]
-    #       plt.plot(times, values, label = "Values")
-    #        plt.axhline(bsm_price, color = "r", ls = "dashed", label = "BSM price")
-    #        plt.grid()
-    #        plt.xlabel("Number of steps")
-    #        plt.ylabel("European option value")
-    #        plt.xlim(0, max_time)
-    #        plt.legend(loc = 4)
-    #        plt.show()
+    def plot_convergence(self, step, max_time, min_time = 1, solver = "CRR"):
+        bsm_price = self.get_price(solver = "BSM")
+        times = range(min_time, max_time, step)
+        values = [self.get_price(solver, N) for N in times]
+        plt.plot(times, values, label = "Values")
+        plt.axhline(bsm_price, color = "r", ls = "dashed", label = "BSM price")
+        plt.grid()
+        plt.xlabel("Number of steps")
+        plt.ylabel("European option value")
+        plt.xlim(0, max_time)
+        plt.legend(loc = 4)
+        return plt.show()
             
             
     def get_delta(self):
